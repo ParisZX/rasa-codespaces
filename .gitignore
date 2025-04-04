@@ -1,0 +1,23 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Rasa files
+models/               # trained models
+*.db                  # tracker store (SQLite)
+events.out.json       # exported events (if any)
+
+# VSCode / Codespaces
+.vscode/
+*.code-workspace
+
+# Python virtual environments
+.env/
+.venv/
+
+# Mac/OS junk
+.DS_Store
+
+# Rasa cache
+.rasa
