@@ -10,15 +10,17 @@
 
 ## ⚙️ Πώς ξεκινάμε;
 
-1. **Δημιούργησε ένα Codespace**  
-   Πάτησε το πράσινο κουμπί **“Code”** → **“Create codespace on main”** για να ανοίξεις το έργο σε cloud.
+1. **Δημιούργησε ένα Codespace**
+   Ξεκινώντας από αυτό το repository, μπορείς να επιλέξεις το κουμπί "Use this template" για να φτιάξεις ένα νέο repository με βάση αυτό, ή να το ανοίξεις κατευθείαν μέσω Codespaces. Αν δημιουργήσεις πρώτα ένα νέο repo με βάση αυτό, τότε στη συνέχεια μπορείς στο νέο σου repo, να επιλέξεις το πράσινο κουμπί **“Code”** → **“Create codespace on main”** για να ανοίξεις το project στο Codespaces.
 
-2. **Εκπαίδευσε το μοντέλο**
+3. **Εκπαίδευσε το μοντέλο**
+   στο παρόν παράδειγμα έχει ήδη γίνει train για την υπάρχουσα δομή του bot, αλλά έπειτα από κάθε νέα προσθήκη/αλλαγή που κάνεις, θα πρέπει να ξανατρέξεις το:
    ```bash
    rasa train
    ```
+   για να ενσωματωθούν οι αλλαγές σου.
 
-3. **Μίλησε με το bot**
+5. **Μίλησε με το bot**
    ```bash
    rasa shell
    ```
@@ -43,20 +45,20 @@
    ```yaml
    - intent: ask_course_info
      examples: |
-       - Ποια μαθήματα περιλαμβάνει το πρόγραμμα;
-       - Τι περιλαμβάνει το MSc;
+       - What courses are included in the schedule?
+       - What is included in the MSc?
    ```
 
 2. Πρόσθεσε μια απάντηση στο `domain.yml`  
    ```yaml
    responses:
      utter_course_info:
-       - text: "Το πρόγραμμα περιλαμβάνει θεωρητικά και πρακτικά μαθήματα πάνω στην Τεχνητή Νοημοσύνη."
+       - text: "The schedule includes both theoretical and practical courses regarding Artificial Intelligence and its applications in eduational settings."
    ```
 
 3. Πρόσθεσε ένα σενάριο στο `stories.yml`  
    ```yaml
-   - story: πληροφορίες προγράμματος
+   - story: Course information
      steps:
        - intent: ask_course_info
        - action: utter_course_info
