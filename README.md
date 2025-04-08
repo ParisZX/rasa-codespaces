@@ -39,7 +39,7 @@
 
 ---
 
-## 🧚 Δραστηριότητα – Φτιάξε δικό σου σενάριο
+## 🧚 Παράδειγμα – δημιουργία intent
 
 1. Πρόσθεσε μια νέα πρόθεση (intent) στο `nlu.yml`  
    ```yaml
@@ -69,7 +69,53 @@
    rasa train
    ```
 
-5. Δοκίμασέ το με `rasa shell` και γράψε τη φράση που πρόσθεσε!
+5. Δοκίμασέ το με `rasa shell` και γράψε μια από τις φράσεις που πρόσθεσες!
+
+---
+
+## 🧚 Παράδειγμα – προσθήκη slots
+
+1. Πρόσθεσε ένα νέο slot στο `domain.yml`  
+   ```yaml
+   slots:
+      mood:
+         type: text
+         influence_conversation: true
+         mappings:
+            - type: from_entity
+            entity: mood
+   ```
+
+2. Πρόσθεσε μερικές σχετικές απαντήσεις του user στο `nlu.yml`  
+   ```yaml
+   - intent: mood_great
+      examples: |
+         - I'm feeling [happy](mood)
+         - I'm [great](mood)
+         - Feeling really [good](mood)
+   
+   ...
+
+   - intent: mood_unhappy
+      examples: |
+         - [sad](mood)
+         - [unhappy](mood)
+         - [not good](mood)
+   ```
+
+3. Πρόσθεσε μια απάντηση του bot που χρησιμοποιεί το slot, στο `domain.yml`  
+   ```yaml
+   responses:
+      utter_cheer_up:
+         - text: "I see you're feeling {mood}. Want to hear a joke?"
+   ```
+
+4. Εκπαίδευσε ξανά:
+   ```bash
+   rasa train
+   ```
+
+5. Δοκίμασέ το με `rasa shell`!
 
 ---
 
