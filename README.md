@@ -75,8 +75,11 @@
 
 ## 🧚 Παράδειγμα – προσθήκη slots
 
-1. Πρόσθεσε ένα νέο slot στο `domain.yml`  
+1. Πρόσθεσε ένα νέο slot, και το αντίστοιχο entity, στο `domain.yml`  
    ```yaml
+   entities:
+     - mood
+
    slots:
       mood:
          type: text
