@@ -122,6 +122,36 @@
 
 ---
 
+## 🧚 Παράδειγμα – προσθήκη rule
+
+1. Πρόσθεσε ένα νέο rule στο `rules.yml`  
+   ```yaml
+   rules:
+     - rule: fallback for unclear messages
+      steps:
+         - intent: nlu_fallback
+         - action: utter_default
+   ```
+
+2. Πρόσθεσε ένα νέο intent και ένα γενικό response στο `domain.yml`  
+   ```yaml
+   intents:
+      - nlu_fallback  # special fallback intent
+
+   responses:
+      utter_default:
+         - text: "Sorry, I didn't understand that. Could you rephrase?"
+   ```
+
+3. Εκπαίδευσε ξανά:
+   ```bash
+   rasa train
+   ```
+
+4. Δοκίμασέ το με `rasa shell`!
+
+---
+
 ## 📚 Χρήσιμοι Σύνδεσμοι
 
 - [Rasa Documentation (EN)](https://legacy-docs-oss.rasa.com/docs/rasa/)
@@ -137,4 +167,4 @@
 
 ---
 
-Καλή εξερεύνηση! 🎓
+Have fun! 🎓
