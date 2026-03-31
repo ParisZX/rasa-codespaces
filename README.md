@@ -47,7 +47,7 @@
 
 ## 🧚 Παράδειγμα – δημιουργία intent
 
-1. Πρόσθεσε μια νέα πρόθεση (intent) στο `nlu.yml`  
+1. Πρόσθεσε μια νέα πρόθεση (intent) στο `nlu.yml`
    ```yaml
    - intent: ask_course_info
      examples: |
@@ -55,27 +55,33 @@
        - What is included in the MSc?
    ```
 
-2. Πρόσθεσε μια απάντηση στο `domain.yml`  
+2. Δήλωσε το νέο intent στο `domain.yml`
+   ```yaml
+   intents:
+     - ask_course_info
+   ```
+
+3. Πρόσθεσε μια απάντηση στο `domain.yml`
    ```yaml
    responses:
      utter_course_info:
-       - text: "The schedule includes both theoretical and practical courses regarding Artificial Intelligence and its applications in eduational settings."
+     - text: "The schedule includes both theoretical and practical courses regarding Artificial Intelligence and its applications in eduational settings."
    ```
 
-3. Πρόσθεσε ένα σενάριο στο `stories.yml`  
+4. Πρόσθεσε ένα σενάριο στο `stories.yml`
    ```yaml
    - story: Course information
      steps:
-       - intent: ask_course_info
-       - action: utter_course_info
+     - intent: ask_course_info
+     - action: utter_course_info
    ```
 
-4. Εκπαίδευσε ξανά:
+5. Εκπαίδευσε ξανά:
    ```bash
    rasa train
    ```
 
-5. Δοκίμασέ το με `rasa shell` και γράψε μια από τις φράσεις που πρόσθεσες!
+6. Δοκίμασέ το με `rasa shell` και γράψε μια από τις φράσεις που πρόσθεσες!
 
 ---
 
