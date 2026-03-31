@@ -75,72 +75,85 @@
 
 ## 🧚 Παράδειγμα – προσθήκη entity/slot
 
-1. Πρόσθεσε ένα νέο slot, και το αντίστοιχο entity, στο `domain.yml`  
+1. Πρόσθεσε ένα νέο entity και το αντίστοιχο slot στο `domain.yml`
    ```yaml
    entities:
      - mood
 
    slots:
-      mood:
-         type: text
-         influence_conversation: true
-         mappings:
-            - type: from_entity
-            entity: mood
+     mood:
+       type: text
+       influence_conversation: true
+       mappings:
+       - type: from_entity
+         entity: mood
    ```
 
-2. Πρόσθεσε μερικές σχετικές απαντήσεις του user στο `nlu.yml`  
+2. Πρόσθεσε (ή ενημέρωσε) τα training examples στο `nlu.yml`, σημειώνοντας τα entities με `[value](entity_name)`
    ```yaml
    - intent: mood_great
-      examples: |
-         - I'm feeling [happy](mood)
-         - I'm [great](mood)
-         - Feeling really [good](mood)
-   
-   ...
+     examples: |
+       - I'm feeling [happy](mood)
+       - I'm [great](mood)
+       - Feeling really [good](mood)
 
    - intent: mood_unhappy
-      examples: |
-         - [sad](mood)
-         - [unhappy](mood)
-         - [not good](mood)
+     examples: |
+       - [sad](mood)
+       - [unhappy](mood)
+       - [not good](mood)
    ```
 
-3. Πρόσθεσε μια απάντηση του bot που χρησιμοποιεί το slot, στο `domain.yml`  
+3. Πρόσθεσε μια **νέα** απάντηση του bot που χρησιμοποιεί το slot, στο `domain.yml`
    ```yaml
    responses:
-      utter_cheer_up:
-         - text: "I see you're feeling {mood}. Want to hear a joke?"
+     utter_mood:
+     - text: "I see you're feeling {mood}"
+   ```
+   Πρόσεξε: δημιουργούμε μια νέα απάντηση `utter_mood` αντί να αλλάζουμε κάποια υπάρχουσα.
+
+4. Ενημέρωσε το `stories.yml` ώστε να χρησιμοποιεί τη νέα απάντηση
+   ```yaml
+   - story: sad path 1
+     steps:
+     - intent: greet
+     - action: utter_greet
+     - intent: mood_unhappy
+     - action: utter_mood
+     - action: utter_cheer_up
+     - action: utter_did_that_help
+     - intent: affirm
+     - action: utter_happy
    ```
 
-4. Εκπαίδευσε ξανά:
+5. Εκπαίδευσε ξανά:
    ```bash
    rasa train
    ```
 
-5. Δοκίμασέ το με `rasa shell`!
+6. Δοκίμασέ το με `rasa shell`!
 
 ---
 
 ## 🧚 Παράδειγμα – προσθήκη rule
 
-1. Πρόσθεσε ένα νέο rule στο `rules.yml`  
+1. Πρόσθεσε ένα νέο rule στο `rules.yml`
    ```yaml
    rules:
-     - rule: fallback for unclear messages
-      steps:
-         - intent: nlu_fallback
-         - action: utter_default
+   - rule: fallback for unclear messages
+     steps:
+     - intent: nlu_fallback
+     - action: utter_default
    ```
 
-2. Πρόσθεσε ένα νέο intent και ένα γενικό response στο `domain.yml`  
+2. Πρόσθεσε ένα νέο intent και ένα γενικό response στο `domain.yml`
    ```yaml
    intents:
-      - nlu_fallback  # special fallback intent
+     - nlu_fallback
 
    responses:
-      utter_default:
-         - text: "Sorry, I didn't understand that. Could you rephrase?"
+     utter_default:
+     - text: "Sorry, I didn't understand that. Could you rephrase?"
    ```
 
 3. Εκπαίδευσε ξανά:
