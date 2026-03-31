@@ -149,6 +149,8 @@
 
 ## 🧚 Παράδειγμα – προσθήκη rule
 
+Τα rules χρησιμοποιούνται για ροές διαλόγου που πρέπει να ακολουθούνται πάντα με τον ίδιο τρόπο, ανεξάρτητα από το context της συνομιλίας. Σε αυτό το παράδειγμα χρησιμοποιούμε το `nlu_fallback` — ένα ειδικό built-in intent του Rasa που ενεργοποιείται αυτόματα από τον `FallbackClassifier` όταν το μοντέλο δεν είναι σίγουρο για την πρόθεση του χρήστη (δηλαδή όταν η βαθμολογία confidence πέφτει κάτω από ένα όριο). Δεν χρειάζεται να προσθέσεις training examples γι' αυτό — δες περισσότερα στην [τεκμηρίωση του Rasa για Fallback](https://legacy-docs-oss.rasa.com/docs/rasa/fallback-handoff/#nlu-fallback).
+
 1. Πρόσθεσε ένα νέο rule στο `rules.yml`
    ```yaml
    rules:
@@ -158,7 +160,7 @@
      - action: utter_default
    ```
 
-2. Πρόσθεσε ένα νέο intent και ένα γενικό response στο `domain.yml`
+2. Πρόσθεσε το intent `nlu_fallback` και ένα γενικό response στο `domain.yml`
    ```yaml
    intents:
      - nlu_fallback
