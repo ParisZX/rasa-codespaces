@@ -165,6 +165,96 @@
 
 ---
 
+## 🧚 Παράδειγμα – προσθήκη form
+
+Τα forms χρησιμοποιούνται όταν το bot χρειάζεται να συλλέξει πολλές πληροφορίες από τον χρήστη, ρωτώντας τον μία-μία. Το Rasa διαχειρίζεται αυτόματα τη ροή: ρωτάει κάθε πεδίο με τη σειρά, και αν ο χρήστης δώσει κάποια πληροφορία νωρίτερα, το bot δεν τη ζητάει ξανά.
+
+Σε αυτό το παράδειγμα θα φτιάξουμε μια φόρμα feedback, όπου ο χρήστης δίνει το όνομά του και ένα σχόλιο.
+
+1. Πρόσθεσε τα slots και τη φόρμα στο `domain.yml`
+   ```yaml
+   slots:
+     name:
+       type: text
+       influence_conversation: false
+       mappings:
+       - type: from_text
+         conditions:
+         - active_loop: feedback_form
+           requested_slot: name
+     feedback_message:
+       type: text
+       influence_conversation: false
+       mappings:
+       - type: from_text
+         conditions:
+         - active_loop: feedback_form
+           requested_slot: feedback_message
+
+   forms:
+     feedback_form:
+       required_slots:
+       - name
+       - feedback_message
+   ```
+   Και τα δύο slots χρησιμοποιούν `from_text`, που σημαίνει ότι καταγράφουν ολόκληρο το μήνυμα του χρήστη ως τιμή — αλλά μόνο όταν η φόρμα είναι ενεργή και ζητάει το συγκεκριμένο slot (χάρη στο `conditions`).
+
+2. Πρόσθεσε τα responses που χρησιμοποιεί η φόρμα για να ρωτάει κάθε slot, στο `domain.yml`
+   ```yaml
+   responses:
+     utter_ask_name:
+     - text: "What is your name?"
+     utter_ask_feedback_message:
+     - text: "Thanks {name}! Please write your feedback:"
+     utter_feedback_thanks:
+     - text: "Thank you {name}, your feedback has been received!"
+   ```
+   Πρόσεξε: τα responses `utter_ask_<slot_name>` πρέπει να ταιριάζουν ακριβώς με τα ονόματα των slots.
+
+3. Πρόσθεσε ένα νέο intent στο `nlu.yml`
+   ```yaml
+   - intent: give_feedback
+     examples: |
+       - I want to give feedback
+       - I'd like to leave a comment
+       - feedback
+       - I have some feedback
+       - can I leave feedback?
+   ```
+
+4. Πρόσθεσε τα rules που ενεργοποιούν και ολοκληρώνουν τη φόρμα, στο `rules.yml`
+   ```yaml
+   - rule: Activate feedback form
+     steps:
+     - intent: give_feedback
+     - action: feedback_form
+     - active_loop: feedback_form
+
+   - rule: Submit feedback form
+     condition:
+     - active_loop: feedback_form
+     steps:
+     - action: feedback_form
+     - active_loop: null
+     - action: utter_feedback_thanks
+   ```
+   Πρόσεξε: τα forms ενεργοποιούνται και ολοκληρώνονται μέσω rules (όχι stories), γιατί η ροή τους είναι πάντα η ίδια.
+
+5. Μην ξεχάσεις να προσθέσεις το intent `give_feedback` στη λίστα intents του `domain.yml`
+   ```yaml
+   intents:
+     - give_feedback
+   ```
+
+6. Εκπαίδευσε ξανά:
+   ```bash
+   rasa train
+   ```
+
+7. Δοκίμασέ το με `rasa shell` — γράψε "I want to give feedback" και ακολούθησε τις ερωτήσεις!
+
+---
+
 ## 📚 Χρήσιμοι Σύνδεσμοι
 
 - [Rasa Documentation (EN)](https://legacy-docs-oss.rasa.com/docs/rasa/)
